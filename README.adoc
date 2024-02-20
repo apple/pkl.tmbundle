@@ -1,4 +1,4 @@
-= TextMate grammar for https://github.com/apple/pkl[Pkl]
+= TextMate grammar for https://pkl-lang.org[Pkl]
 
 == Development
 
