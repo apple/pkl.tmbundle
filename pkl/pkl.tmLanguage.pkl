@@ -1,0 +1,622 @@
+//===----------------------------------------------------------------------===//
+// Copyright © 2024 Apple Inc. and the Pkl project authors. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//===----------------------------------------------------------------------===//
+
+amends "tmLanguage.pkl"
+
+name = "Pkl"
+
+scopeName = "source.pkl"
+
+uuid = "0598575b-33f4-42c1-b797-5b93a6cfc03a"
+
+fileTypes {
+  "pkl"
+  "pcf"
+}
+
+foldingStartMarker = "\\{"
+
+foldingStopMarker = "}"
+
+local function escape(numPounds: Int): MatchPattern = new {
+  name = "constant.character.escape.\(numPounds).pkl"
+  local escapeChar = #"\\"# + "\\#".repeat(numPounds)
+  match = #"""
+    (?x:                 # turn on extended mode
+      \#(escapeChar)
+      (?:
+        [trn"\\]         # tab, carriage return, newline, quote, backslash
+        |                # OR
+        u                # the letter u
+        \{               # curly opening brace literal
+        [\da-fA-F]+      # 1 or more hex number literal
+        }                # curly end literal
+        |                # OR
+        \(               # interpolation start
+        .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+        \)               # interpolation end
+      )
+      |                  # OR
+      (                  # capture group: invalid escape
+        \#(escapeChar)   # the escape char
+        .                # any character
+      )
+    )
+    """#
+  captures {
+    ["1"] {
+      name = "invalid.illegal.unrecognized-string-escape.pkl"
+    }
+  }
+}
+
+local function singlelineString(numPounds: Int): BeginEndPattern = new {
+  name = "string.quoted.double.\(numPounds).pkl"
+  local pounds = "#".repeat(numPounds)
+  local stringStart = "(" + pounds + "\"" + ")"
+  local stringEnd = "(" + "\"" + pounds.replaceAll("#", "\\#") + ")"
+  begin = stringStart
+  beginCaptures {
+    ["1"] { name = "punctuation.delimiter.pkl" }
+  }
+  end = #"""
+    (?x:
+      \#(stringEnd)         # string end
+      |                     # OR
+      (.?$)                 # error; unterminated string (flag last character as an error)
+    )
+    """#
+  endCaptures {
+    ["1"] { name = "punctuation.delimimter.pkl" }
+    ["2"] { name = "invalid.illegal.newline.pkl" }
+  }
+  patterns {
+    escape(numPounds)
+  }
+}
+
+local function multilineString(numPounds: Int): BeginEndPattern = new {
+  local pounds = "#".repeat(numPounds)
+  name = "string.quoted.triple.\(numPounds).pkl"
+  begin = #"""
+    (\#(pounds)""")
+    """#
+  end = #"""
+    ("""\#(pounds))
+    """#
+  captures {
+    ["1"] {
+      name = "punctuation.delimiter.pkl"
+    }
+  }
+  patterns {
+    escape(numPounds)
+  }
+}
+
+@SourceCode { language = "RegExp" }
+local identRegex: String = #"[\p{L}_$][\p{L}0-9_$]*"#
+
+@SourceCode { language = "RegExp" }
+local baseTypeRegex: String = #"""
+  (?x:
+    \#(identRegex) # ident
+    \s*
+    (?:<[^>]*>)? # optional type parameters
+    \s*
+    (?:\([^)]*\))? # optional constraint (this is an approximation)
+    \s*
+    \?? # optional nulability indicator
+  )
+  """#
+
+@SourceCode { language = "RegExp" }
+local typeRegex: String = #"""
+  (?x:
+    \#(baseTypeRegex)
+    \s*
+    (\|\s*\#(baseTypeRegex))*
+  )
+  """#
+
+local languageConstant: Pattern = new KeywordMatchPattern {
+  name = "constant.character.language.pkl"
+  // language=regexp
+  keywords {
+    "true"
+    "false"
+    "null"
+  }
+}.pattern
+
+local lineComment: MatchPattern = new {
+  name = "comment.line.pkl"
+  match = "//.*"
+}
+
+local blockComment: BeginEndPattern = new {
+  name = "comment.block.pkl"
+  // language=regexp
+  begin = "/\\*"
+  // language=regexp
+  end = "\\*/"
+}
+
+local modifier: Pattern = new KeywordMatchPattern {
+  name = "storage.modifier.pkl"
+  keywords {
+    "hidden"
+    "local"
+    "abstract"
+    "external"
+    "open"
+    "in"
+    "out"
+    "amends"
+    "extends"
+    "fixed"
+    "const"
+  }
+}.pattern
+
+local controlKeyword: Pattern = new KeywordMatchPattern {
+  name = "keyword.control.pkl"
+  keywords {
+    "if"
+    "else"
+    "when"
+    "for"
+    "import"
+    "new"
+  }
+}.pattern
+
+local class KeywordMatchPattern {
+  local self = this
+  name: String
+  keywords: Listing<String>(isDistinct)
+
+  pattern: MatchPattern = new {
+    name = self.name
+    match = new Listing {
+      "\\b"
+      "("
+      keywords.join("|")
+      ")"
+      "\\b"
+    }.join("")
+  }
+}
+
+local symbolOperator: MatchPattern = new {
+  name = "keyword.operator.pkl"
+  match = #"""
+    (?x:
+      # MATH
+      \+    # add
+      |
+      -     # minus
+      |
+      \*    # multiply
+      |
+      /     # divide
+      |
+      ~/    # integer divide
+      |
+      %     # modulo
+      |
+      \*\*  # power
+      |
+      >     # greater than
+      |
+      >=    # greater than or equals
+      |
+      <     # less than
+      |
+      <=    # less than or equals
+      |
+      ==    # equals
+      |
+      !=    # not equals
+
+      # LOGICAL
+      |
+      !     # unary not
+      |
+      &&    # and
+      |
+      \|\|  # or
+      |
+
+      # MISCELLANEOUS
+      \|>   # function pipe
+      |
+      \?\?  # nullish coalesce
+      |
+      !!    # non-null assertion
+      |
+      =     # assignment
+      |
+      ->    # lambda arrow
+      |
+      \|    # type union
+    )
+    """#
+}
+
+local punctuation: MatchPattern = new {
+  name = "punctuation.pkl"
+  match = #"""
+    (?x:
+      \.\?  # optional chain
+      |
+      \.    # member access
+      |
+      ;     # semicolon
+      |
+      :     # colon
+    )
+    """#
+}
+
+local keywordOperator: MatchPattern = new KeywordMatchPattern {
+  name = "keyword.pkl"
+  keywords {
+    "amends"
+    "as"
+    "extends"
+    "function"
+    "is"
+    "let"
+    "read"
+    "read\\?"
+    "import"
+    "throw"
+    "trace"
+  }
+}.pattern
+
+
+local builtInVariable: Pattern = new KeywordMatchPattern {
+  name = "variable.language.pkl"
+  // language=regexp
+  keywords {
+    "this"
+    "module"
+    "outer"
+    "super"
+  }
+}.pattern
+
+local builtInTypes: Pattern = new KeywordMatchPattern {
+  name = "support.type.pkl"
+  keywords {
+    "unknown"
+    "never"
+  }
+}.pattern
+
+local braces: MatchPattern = new {
+  name = "meta.brace.pkl"
+  match = #"[(){}\[\]]"#
+}
+
+local hexLiteral: MatchPattern = new {
+  name = "constant.numeric.hex.pkl"
+  match = #"""
+    (?x:
+      \b
+      0x(?:[\da-fA-F][\da-fA-F_]*[\da-fA-F]|[\da-fA-F_])
+      \b
+    )
+    """#
+}
+
+local binaryLiteral: MatchPattern = new {
+  name = "constant.numeric.binary.pkl"
+  match = #"""
+    (?x:
+      \b
+      0b(?:[0-1][0-1_]*[0-1]|[0-1])
+      \b
+    )
+    """#
+}
+
+local octalLiteral: MatchPattern = new {
+  name = "constant.numeric.octal.pkl"
+  match = #"""
+    (?x:
+      \b
+      0o(?:[0-7][0-7_]*[0-7]|[0-7])
+      \b
+    )
+    """#
+}
+
+local decimalLiteral: MatchPattern = new {
+  name = "constant.numeric.decimal.pkl"
+  match = #"""
+    (?x:
+      \b
+      (?:\d[0-9_]*\d|\d)
+      \b
+    )
+    """#
+}
+
+local floatLiteral: MatchPattern = new {
+  name = "constant.numeric.pkl"
+  match = #"""
+    (?x:
+      \b
+      (?:
+        (?:\d[0-9_]*\d|\d)?              # 0 or more digits
+        \.                               # dot literal
+        (?:\d[0-9_]*\d|\d)               # 1 or more digits
+        (?:[eE][+-]?(?:\d[0-9_]*\d|\d))? # optional exponent
+        |                                # OR
+        (?:\d[0-9_]*\d|\d)               # 1 or more digits
+        [eE][+-]?(?:\d[0-9_]*\d|\d)      # exponent
+      )
+      \b
+    )
+    """#
+}
+
+local classKeyword: Pattern = new KeywordMatchPattern {
+  name = "keyword.class.pkl"
+  keywords {
+    "class"
+    "typealias"
+  }
+}.pattern
+
+local annotation: MatchPattern = new {
+  name = "entity.name.type.pkl"
+  match = #"@\#(identRegex)"#
+}
+
+local modulePattern: MatchPattern = new {
+  match = #"""
+    (?x:
+      \b
+      (module)
+      \s+
+      (
+        \#(identRegex)(?:\.\#(identRegex))*
+      )
+    )
+    """#
+  captures {
+    ["1"] {
+      name = "variable.language.pkl"
+    }
+    ["2"] {
+      name = "variable.other.module.pkl"
+    }
+  }
+}
+
+local typeAlias: MatchPattern = new {
+  name = ""
+  match = #"""
+    (?x:
+      (typealias)
+      \s+
+      (\#(identRegex))
+      \s*(=)\s*
+      (\#(typeRegex))
+    )
+    """#
+  captures {
+    ["1"] {
+      name = "keyword.class.pkl"
+    }
+    ["2"] {
+      name = "entity.name.type.pkl"
+    }
+    ["3"] {
+      name = "punctuation.pkl"
+    }
+    ["4"] {
+      name = "entity.name.type.pkl"
+    }
+  }
+}
+
+local variableDecl: MatchPattern = new {
+  match = #"""
+    (?x:
+      (
+        \b\#(identRegex) # variable name
+        |
+        `[^`]+` # quoted variable name
+      )
+      \s*
+      (=)(?!=)
+    )
+    """#
+  captures {
+    ["1"] {
+      name = "variable.other.property.pkl"
+    }
+    ["2"] {
+      name = "punctuation.pkl"
+    }
+  }
+}
+
+local variableDeclType: BeginEndPattern = new {
+  begin = #"""
+    (?x:
+      (
+        (?:\b|\s*)\#(identRegex) # variable name
+        |
+        `[^`]+` # quoted variable name
+      )
+      \s*
+      (:)
+      \s*
+      (\#(typeRegex)) # type
+    )
+    """#
+  end = #"\s*=|,|\)|^[ \t]*$"#
+  captures {
+    ["1"] {
+      name = "variable.other.property.pkl"
+    }
+    ["2"] {
+      name = "punctuation.pkl"
+    }
+    ["3"] {
+      name = "entity.name.type.pkl"
+    }
+  }
+}
+
+local genericType: MatchPattern = new {
+  match = #"(:)\s*(\#(typeRegex))"#
+  captures {
+    ["1"] {
+      name = "punctuation.pkl"
+    }
+    ["2"] {
+      name = "entity.name.type.pkl"
+    }
+  }
+}
+
+local forPattern: MatchPattern = new {
+  match = #"""
+    (?x:
+      \b(for)
+      \s*\(
+      (\#(identRegex))(?:\s*,\s*(\#(identRegex)))* # bindings
+      \s+
+      (in)
+    )
+    """#
+  captures {
+    ["1"] {
+      name = "keyword.control.pkl"
+    }
+    ["2"] {
+      name = "variable.other.property.pkl"
+    }
+    ["3"] {
+      name = "variable.other.property.pkl"
+    }
+    ["4"] {
+      name = "storage.modifier.pkl"
+    }
+  }
+}
+
+local clazz: MatchPattern = new {
+  name = "entity.name.type.pkl"
+  match = #"\b(class)\s+\#(identRegex)"#
+  captures {
+    ["1"] {
+      name = "keyword.class.pkl"
+    }
+  }
+}
+
+local newPattern: MatchPattern = new {
+  match = #"""
+    \b(new)\s+(\#(typeRegex))
+    """#
+  captures {
+    ["1"] {
+      name = "keyword.control.pkl"
+    }
+    ["2"] {
+      name = "entity.name.type.pkl"
+    }
+  }
+}
+
+local functionPattern: MatchPattern = new {
+  match = #"""
+    \b(function)\s+(\#(identRegex))
+    """#
+  captures {
+    ["1"] {
+      name = "keyword.pkl"
+    }
+    ["2"] {
+      name = "variable.other.property.pkl"
+    }
+  }
+}
+
+local asPattern: MatchPattern = new {
+  match = #"\b(as)\s+(\#(typeRegex))"#
+  captures {
+    ["1"] {
+      name = "keyword.pkl"
+    }
+    ["2"] {
+      name = "entity.name.type.pkl"
+    }
+  }
+}
+
+local amendedVar: MatchPattern = new {
+  match = #"^\s*(\#(identRegex))\s*\{"#
+  captures {
+    ["1"] {
+      name = "variable.other.property.pkl"
+    }
+  }
+}
+
+patterns {
+  modulePattern
+  typeAlias
+  clazz
+  forPattern
+  newPattern
+  functionPattern
+  asPattern
+  languageConstant
+  lineComment
+  blockComment
+  variableDeclType
+  variableDecl
+  genericType
+  amendedVar
+  modifier
+  keywordOperator
+  controlKeyword
+  hexLiteral
+  binaryLiteral
+  octalLiteral
+  decimalLiteral
+  floatLiteral
+  symbolOperator
+  builtInVariable
+  builtInTypes
+  braces
+  classKeyword
+  punctuation
+  annotation
+  for (numPounds in IntSeq(0, 6)) {
+    multilineString(numPounds)
+    singlelineString(numPounds)
+  }
+}

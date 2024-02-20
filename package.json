@@ -1,0 +1,26 @@
+{
+  "name": "pkl.tmbundle",
+  "version": "1.0.0",
+  "description": "Pkl TextMate grammar",
+  "main": "index.js",
+  "scripts": {
+    "build:pkl": "pkl eval -m . pkl/index.pkl",
+    "clean": "rm -f Snippets/*.json && rm -f Syntaxes/*.json",
+    "build": "npm run clean && npm run build:pkl",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apple/pkl.tmbundle.git"
+  },
+  "keywords": [
+    "pkl",
+    "textmate"
+  ],
+  "author": "The Pkl Authors",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/apple/pkl.tmbundle/issues"
+  },
+  "homepage": "https://github.com/apple/pkl.tmbundle#readme"
+}
