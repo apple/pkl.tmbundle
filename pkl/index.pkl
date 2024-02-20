@@ -16,7 +16,7 @@
 
 output {
   files {
-    ["Syntaxes/pkl.tmLanguage.json"] = import("pkl.tmLanguage.pkl").output
-    ["Snippets/pkl.snippets.json"] = import("snippets.pkl").output
+    ["syntaxes/pkl.tmLanguage.json"] = import("pkl.tmLanguage.pkl").output
+    ["snippets/pkl.snippets.json"] = import("snippets.pkl").output
   }
 }
