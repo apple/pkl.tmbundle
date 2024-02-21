@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>prefix</key>
+  <string>function</string>
+  <key>body</key>
+  <string>function ${1:functionName}(${2:parameterName}: ${3:parameterType}): ${4:returnType} = $0</string>
+</dict>
+</plist>

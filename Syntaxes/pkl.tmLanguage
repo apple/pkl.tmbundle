@@ -1,0 +1,1409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>name</key>
+  <string>Pkl</string>
+  <key>scopeName</key>
+  <string>source.pkl</string>
+  <key>fileTypes</key>
+  <array>
+    <string>pkl</string>
+    <string>pcf</string>
+  </array>
+  <key>foldingStartMarker</key>
+  <string>\{</string>
+  <key>foldingStopMarker</key>
+  <string>}</string>
+  <key>uuid</key>
+  <string>0598575b-33f4-42c1-b797-5b93a6cfc03a</string>
+  <key>patterns</key>
+  <array>
+    <dict>
+      <key>match</key>
+      <string>(?x:
+  \b
+  (module)
+  \s+
+  (
+    [\p{L}_$][\p{L}0-9_$]*(?:\.[\p{L}_$][\p{L}0-9_$]*)*
+  )
+)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>variable.language.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>variable.other.module.pkl</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>match</key>
+      <string>(?x:
+  (typealias)
+  \s+
+  ([\p{L}_$][\p{L}0-9_$]*)
+  \s*(=)\s*
+  ((?x:
+  (?x:
+  [\p{L}_$][\p{L}0-9_$]* # ident
+  \s*
+  (?:&lt;[^&gt;]*&gt;)? # optional type parameters
+  \s*
+  (?:\([^)]*\))? # optional constraint (this is an approximation)
+  \s*
+  \?? # optional nulability indicator
+)
+  \s*
+  (\|\s*(?x:
+  [\p{L}_$][\p{L}0-9_$]* # ident
+  \s*
+  (?:&lt;[^&gt;]*&gt;)? # optional type parameters
+  \s*
+  (?:\([^)]*\))? # optional constraint (this is an approximation)
+  \s*
+  \?? # optional nulability indicator
+))*
+))
+)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.class.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>entity.name.type.pkl</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.pkl</string>
+        </dict>
+        <key>4</key>
+        <dict>
+          <key>name</key>
+          <string>entity.name.type.pkl</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>entity.name.type.pkl</string>
+      <key>match</key>
+      <string>\b(class)\s+[\p{L}_$][\p{L}0-9_$]*</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.class.pkl</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>match</key>
+      <string>(?x:
+  \b(for)
+  \s*\(
+  ([\p{L}_$][\p{L}0-9_$]*)(?:\s*,\s*([\p{L}_$][\p{L}0-9_$]*))* # bindings
+  \s+
+  (in)
+)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.control.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>variable.other.property.pkl</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>variable.other.property.pkl</string>
+        </dict>
+        <key>4</key>
+        <dict>
+          <key>name</key>
+          <string>storage.modifier.pkl</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>match</key>
+      <string>\b(new)\s+((?x:
+  (?x:
+  [\p{L}_$][\p{L}0-9_$]* # ident
+  \s*
+  (?:&lt;[^&gt;]*&gt;)? # optional type parameters
+  \s*
+  (?:\([^)]*\))? # optional constraint (this is an approximation)
+  \s*
+  \?? # optional nulability indicator
+)
+  \s*
+  (\|\s*(?x:
+  [\p{L}_$][\p{L}0-9_$]* # ident
+  \s*
+  (?:&lt;[^&gt;]*&gt;)? # optional type parameters
+  \s*
+  (?:\([^)]*\))? # optional constraint (this is an approximation)
+  \s*
+  \?? # optional nulability indicator
+))*
+))</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.control.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>entity.name.type.pkl</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>match</key>
+      <string>\b(function)\s+([\p{L}_$][\p{L}0-9_$]*)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>variable.other.property.pkl</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>match</key>
+      <string>\b(as)\s+((?x:
+  (?x:
+  [\p{L}_$][\p{L}0-9_$]* # ident
+  \s*
+  (?:&lt;[^&gt;]*&gt;)? # optional type parameters
+  \s*
+  (?:\([^)]*\))? # optional constraint (this is an approximation)
+  \s*
+  \?? # optional nulability indicator
+)
+  \s*
+  (\|\s*(?x:
+  [\p{L}_$][\p{L}0-9_$]* # ident
+  \s*
+  (?:&lt;[^&gt;]*&gt;)? # optional type parameters
+  \s*
+  (?:\([^)]*\))? # optional constraint (this is an approximation)
+  \s*
+  \?? # optional nulability indicator
+))*
+))</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>keyword.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>entity.name.type.pkl</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>constant.character.language.pkl</string>
+      <key>match</key>
+      <string>\b(true|false|null)\b</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>comment.line.pkl</string>
+      <key>match</key>
+      <string>//.*</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>comment.block.pkl</string>
+      <key>begin</key>
+      <string>/\*</string>
+      <key>end</key>
+      <string>\*/</string>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>(?x:
+  (
+    (?:\b|\s*)[\p{L}_$][\p{L}0-9_$]* # variable name
+    |
+    `[^`]+` # quoted variable name
+  )
+  \s*
+  (:)
+  \s*
+  ((?x:
+  (?x:
+  [\p{L}_$][\p{L}0-9_$]* # ident
+  \s*
+  (?:&lt;[^&gt;]*&gt;)? # optional type parameters
+  \s*
+  (?:\([^)]*\))? # optional constraint (this is an approximation)
+  \s*
+  \?? # optional nulability indicator
+)
+  \s*
+  (\|\s*(?x:
+  [\p{L}_$][\p{L}0-9_$]* # ident
+  \s*
+  (?:&lt;[^&gt;]*&gt;)? # optional type parameters
+  \s*
+  (?:\([^)]*\))? # optional constraint (this is an approximation)
+  \s*
+  \?? # optional nulability indicator
+))*
+)) # type
+)</string>
+      <key>end</key>
+      <string>\s*=|,|\)|^[ \t]*$</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>variable.other.property.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.pkl</string>
+        </dict>
+        <key>3</key>
+        <dict>
+          <key>name</key>
+          <string>entity.name.type.pkl</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>match</key>
+      <string>(?x:
+  (
+    \b[\p{L}_$][\p{L}0-9_$]* # variable name
+    |
+    `[^`]+` # quoted variable name
+  )
+  \s*
+  (=)(?!=)
+)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>variable.other.property.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.pkl</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>match</key>
+      <string>(:)\s*((?x:
+  (?x:
+  [\p{L}_$][\p{L}0-9_$]* # ident
+  \s*
+  (?:&lt;[^&gt;]*&gt;)? # optional type parameters
+  \s*
+  (?:\([^)]*\))? # optional constraint (this is an approximation)
+  \s*
+  \?? # optional nulability indicator
+)
+  \s*
+  (\|\s*(?x:
+  [\p{L}_$][\p{L}0-9_$]* # ident
+  \s*
+  (?:&lt;[^&gt;]*&gt;)? # optional type parameters
+  \s*
+  (?:\([^)]*\))? # optional constraint (this is an approximation)
+  \s*
+  \?? # optional nulability indicator
+))*
+))</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>entity.name.type.pkl</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>match</key>
+      <string>^\s*([\p{L}_$][\p{L}0-9_$]*)\s*\{</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>variable.other.property.pkl</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>storage.modifier.pkl</string>
+      <key>match</key>
+      <string>\b(hidden|local|abstract|external|open|in|out|amends|extends|fixed|const)\b</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>keyword.pkl</string>
+      <key>match</key>
+      <string>\b(amends|as|extends|function|is|let|read|read\?|import|throw|trace)\b</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>keyword.control.pkl</string>
+      <key>match</key>
+      <string>\b(if|else|when|for|import|new)\b</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>constant.numeric.hex.pkl</string>
+      <key>match</key>
+      <string>(?x:
+  \b
+  0x(?:[\da-fA-F][\da-fA-F_]*[\da-fA-F]|[\da-fA-F_])
+  \b
+)</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>constant.numeric.binary.pkl</string>
+      <key>match</key>
+      <string>(?x:
+  \b
+  0b(?:[0-1][0-1_]*[0-1]|[0-1])
+  \b
+)</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>constant.numeric.octal.pkl</string>
+      <key>match</key>
+      <string>(?x:
+  \b
+  0o(?:[0-7][0-7_]*[0-7]|[0-7])
+  \b
+)</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>constant.numeric.decimal.pkl</string>
+      <key>match</key>
+      <string>(?x:
+  \b
+  (?:\d[0-9_]*\d|\d)
+  \b
+)</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>constant.numeric.pkl</string>
+      <key>match</key>
+      <string>(?x:
+  \b
+  (?:
+    (?:\d[0-9_]*\d|\d)?              # 0 or more digits
+    \.                               # dot literal
+    (?:\d[0-9_]*\d|\d)               # 1 or more digits
+    (?:[eE][+-]?(?:\d[0-9_]*\d|\d))? # optional exponent
+    |                                # OR
+    (?:\d[0-9_]*\d|\d)               # 1 or more digits
+    [eE][+-]?(?:\d[0-9_]*\d|\d)      # exponent
+  )
+  \b
+)</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>keyword.operator.pkl</string>
+      <key>match</key>
+      <string>(?x:
+  # MATH
+  \+    # add
+  |
+  -     # minus
+  |
+  \*    # multiply
+  |
+  /     # divide
+  |
+  ~/    # integer divide
+  |
+  %     # modulo
+  |
+  \*\*  # power
+  |
+  &gt;     # greater than
+  |
+  &gt;=    # greater than or equals
+  |
+  &lt;     # less than
+  |
+  &lt;=    # less than or equals
+  |
+  ==    # equals
+  |
+  !=    # not equals
+
+  # LOGICAL
+  |
+  !     # unary not
+  |
+  &amp;&amp;    # and
+  |
+  \|\|  # or
+  |
+
+  # MISCELLANEOUS
+  \|&gt;   # function pipe
+  |
+  \?\?  # nullish coalesce
+  |
+  !!    # non-null assertion
+  |
+  =     # assignment
+  |
+  -&gt;    # lambda arrow
+  |
+  \|    # type union
+)</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>variable.language.pkl</string>
+      <key>match</key>
+      <string>\b(this|module|outer|super)\b</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>support.type.pkl</string>
+      <key>match</key>
+      <string>\b(unknown|never)\b</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>meta.brace.pkl</string>
+      <key>match</key>
+      <string>[(){}\[\]]</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>keyword.class.pkl</string>
+      <key>match</key>
+      <string>\b(class|typealias)\b</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>punctuation.pkl</string>
+      <key>match</key>
+      <string>(?x:
+  \.\?  # optional chain
+  |
+  \.    # member access
+  |
+  ;     # semicolon
+  |
+  :     # colon
+)</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>entity.name.type.pkl</string>
+      <key>match</key>
+      <string>@[\p{L}_$][\p{L}0-9_$]*</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.triple.0.pkl</string>
+      <key>begin</key>
+      <string>(&quot;&quot;&quot;)</string>
+      <key>end</key>
+      <string>(&quot;&quot;&quot;)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.0.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.double.0.pkl</string>
+      <key>begin</key>
+      <string>(&quot;)</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>end</key>
+      <string>(?x:
+  (&quot;)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimimter.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>invalid.illegal.newline.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.0.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.triple.1.pkl</string>
+      <key>begin</key>
+      <string>(#&quot;&quot;&quot;)</string>
+      <key>end</key>
+      <string>(&quot;&quot;&quot;#)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.1.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.double.1.pkl</string>
+      <key>begin</key>
+      <string>(#&quot;)</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>end</key>
+      <string>(?x:
+  (&quot;\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimimter.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>invalid.illegal.newline.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.1.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.triple.2.pkl</string>
+      <key>begin</key>
+      <string>(##&quot;&quot;&quot;)</string>
+      <key>end</key>
+      <string>(&quot;&quot;&quot;##)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.2.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.double.2.pkl</string>
+      <key>begin</key>
+      <string>(##&quot;)</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>end</key>
+      <string>(?x:
+  (&quot;\#\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimimter.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>invalid.illegal.newline.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.2.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.triple.3.pkl</string>
+      <key>begin</key>
+      <string>(###&quot;&quot;&quot;)</string>
+      <key>end</key>
+      <string>(&quot;&quot;&quot;###)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.3.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.double.3.pkl</string>
+      <key>begin</key>
+      <string>(###&quot;)</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>end</key>
+      <string>(?x:
+  (&quot;\#\#\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimimter.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>invalid.illegal.newline.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.3.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.triple.4.pkl</string>
+      <key>begin</key>
+      <string>(####&quot;&quot;&quot;)</string>
+      <key>end</key>
+      <string>(&quot;&quot;&quot;####)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.4.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.double.4.pkl</string>
+      <key>begin</key>
+      <string>(####&quot;)</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>end</key>
+      <string>(?x:
+  (&quot;\#\#\#\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimimter.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>invalid.illegal.newline.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.4.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.triple.5.pkl</string>
+      <key>begin</key>
+      <string>(#####&quot;&quot;&quot;)</string>
+      <key>end</key>
+      <string>(&quot;&quot;&quot;#####)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.5.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#\#\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.double.5.pkl</string>
+      <key>begin</key>
+      <string>(#####&quot;)</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>end</key>
+      <string>(?x:
+  (&quot;\#\#\#\#\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimimter.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>invalid.illegal.newline.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.5.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#\#\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.triple.6.pkl</string>
+      <key>begin</key>
+      <string>(######&quot;&quot;&quot;)</string>
+      <key>end</key>
+      <string>(&quot;&quot;&quot;######)</string>
+      <key>captures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.6.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#\#\#\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>string.quoted.double.6.pkl</string>
+      <key>begin</key>
+      <string>(######&quot;)</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimiter.pkl</string>
+        </dict>
+      </dict>
+      <key>end</key>
+      <string>(?x:
+  (&quot;\#\#\#\#\#\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.delimimter.pkl</string>
+        </dict>
+        <key>2</key>
+        <dict>
+          <key>name</key>
+          <string>invalid.illegal.newline.pkl</string>
+        </dict>
+      </dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>constant.character.escape.6.pkl</string>
+          <key>match</key>
+          <string>(?x:                 # turn on extended mode
+  \\\#\#\#\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+    |                # OR
+    \(               # interpolation start
+    .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
+    \)               # interpolation end
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+          <key>captures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+            </dict>
+          </dict>
+        </dict>
+      </array>
+    </dict>
+  </array>
+</dict>
+</plist>

@@ -178,7 +178,7 @@ hidden skipIfEmpty = (v: Dynamic|Typed|String) ->
     if (isEmpty) null else v
 
 output {
-  renderer = new JsonRenderer {
+  renderer = new PListRenderer {
     converters {
       [String] = skipIfEmpty
       [Map] = skipIfEmpty

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build:pkl": "pkl eval -m . pkl/index.pkl",
-    "clean": "rm -f snippets/*.json && rm -f syntaxes/*.json",
+    "clean": "rm -f Snippets/*.* && rm -f Syntaxes/*.*",
     "build": "npm run clean && npm run build:pkl",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

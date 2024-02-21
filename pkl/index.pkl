@@ -16,7 +16,13 @@
 
 output {
   files {
-    ["syntaxes/pkl.tmLanguage.json"] = import("pkl.tmLanguage.pkl").output
-    ["snippets/pkl.snippets.json"] = import("snippets.pkl").output
+    local plistRenderer = new PListRenderer {}
+    ["syntaxes/pkl.tmLanguage"] = import("pkl.tmLanguage.pkl").output
+    for (name, snippet in import("snippets.pkl").snippets) {
+      ["Snippets/\(name).tmSnippet"] {
+        value = snippet
+        renderer = plistRenderer
+      }
+    }
   }
 }
