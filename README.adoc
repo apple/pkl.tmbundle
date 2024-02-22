@@ -5,4 +5,4 @@
 Have Pkl installed in your path.
 
 Change the grammar or snippets in the `pkl` folder. +
-Run `npm run build` to generate the `JSON` files out of the pkl files.
+Run `npm run build` to generate the syntax and snippet files.
