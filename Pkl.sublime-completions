@@ -1,0 +1,80 @@
+{
+  "scope": "source.pkl",
+    "completions": [
+      {
+        "trigger": "import",
+        "contents": "import",
+        "kind": "keyword"
+      },
+      {
+        "trigger": "extends",
+        "contents": "extends",
+        "kind": "keyword"
+      },
+      {
+        "trigger": "amends",
+        "contents": "amends",
+        "kind": "keyword"
+      },
+      {
+        "trigger": "module",
+        "contents": "module",
+        "kind": "keyword"
+      },
+      {
+        "trigger": "for",
+        "contents": "for",
+        "kind": "keyword"
+      },
+      {
+        "trigger": "when",
+        "contents": "when",
+        "kind": "keyword"
+      },
+      {
+        "trigger": "if",
+        "contents": "if",
+        "kind": "keyword"
+      },
+      {
+        "trigger": "else",
+        "contents": "else",
+        "kind": "keyword"
+      },
+      {
+        "trigger": "Int",
+        "contents": "Int",
+        "kind": "type"
+      },
+      {
+        "trigger": "Float",
+        "contents": "Float",
+        "kind": "type"
+      },
+      {
+        "trigger": "Bool",
+        "contents": "Bool",
+        "kind": "type"
+      },
+      {
+        "trigger": "String",
+        "contents": "String",
+        "kind": "type"
+      },
+      {
+        "trigger": "true",
+        "contents": "true",
+        "kind": ["variable", "c", "Constant"]
+      },
+      {
+        "trigger": "false",
+        "contents": "false",
+        "kind": ["variable", "c", "Constant"]
+      },
+      {
+        "trigger": "null",
+        "contents": "null",
+        "kind": ["variable", "c", "Constant"]
+      }
+    ]
+}
