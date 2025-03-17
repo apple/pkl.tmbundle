@@ -1,0 +1,12 @@
+headerPath = "scripts/license-header.txt"
+
+includes = [
+    "*.pkl",
+]
+
+[git]
+attrs = 'auto'
+ignore = 'auto'
+
+[properties]
+copyrightOwner = "Apple Inc. and the Pkl project authors"
