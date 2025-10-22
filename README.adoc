@@ -1,6 +1,6 @@
 = TextMate grammar for https://pkl-lang.org[Pkl]
 
-== Development
+== Development=
 
 Have Pkl installed in your path.
 
