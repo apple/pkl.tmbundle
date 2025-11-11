@@ -30,7 +30,7 @@ workflows:
     when:
       matches:
         value: << pipeline.git.branch >>
-        pattern: ^release/\d+\.\d+.*$
+        pattern: ^release/\d+\.\d+$
     jobs:
     - foobar:
         context: pkl-pr-approval
