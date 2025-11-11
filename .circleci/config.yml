@@ -1,6 +1,10 @@
 # Generated from CircleCI.pkl. DO NOT EDIT.
 version: 2.1
 
+orbs:
+  pr-approval: apple/pr-approval@0.1.0
+
+
 jobs:
   foobar:
     docker:
@@ -21,6 +25,8 @@ workflows:
     jobs:
       - hold:
           type: approval
+      - pr-approval/authenticate:
+        context: pkl-pr-approval
       - foobar:
           context: pkl-pr-approval
           requires:
