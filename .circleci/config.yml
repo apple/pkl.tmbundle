@@ -1,7 +1,8 @@
 # Generated from CircleCI.pkl. DO NOT EDIT.
 version: 2.1
 
-setup: true
+orbs:
+  pr-approval: apple/pr-approval@0.1.0
 
 jobs:
   foobar:
@@ -30,6 +31,11 @@ workflows:
     jobs:
       - hold:
           type: approval
+      - pr-approval/authenticate:
+          pre-steps:
+          - run:
+            command: echo "install custom dependency"
+          context: pkl-pr-approval
       - foobar:
           context: pkl-pr-approval
           requires:
