@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  pr-approval: circleci/node@7.2.1
+  pr-approval: simon-testaccount/testorb@1.0.2
 
 
 jobs:
