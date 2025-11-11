@@ -31,6 +31,6 @@ workflows:
       matches:
         value: << pipeline.git.branch >>
         pattern: ^release/\d+\.\d+$
-      jobs:
-      - foobar:
-          context: pkl-pr-approval
+    jobs:
+    - foobar:
+        context: pkl-pr-approval
