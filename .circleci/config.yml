@@ -30,7 +30,7 @@ workflows:
     when:
       equal:
         - main
-        - << pipeline.git.branch >>
+        - main
     jobs:
       - foobar:
           context: pkl-pr-approval
