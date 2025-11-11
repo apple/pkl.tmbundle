@@ -26,11 +26,11 @@ workflows:
           requires:
             - hold
 
-  main:
+  release-branch:
     when:
-      equal:
-        - main
-        - main
-    jobs:
+      matches:
+        value: << pipeline.git.branch >>
+        pattern: ^release/\d+\.\d+$
+      jobs:
       - foobar:
           context: pkl-pr-approval
