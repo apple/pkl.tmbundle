@@ -30,8 +30,6 @@ workflows:
     jobs:
       - hold:
           type: approval
-      - pr-approval-authenticate:
-          context: pkl-pr-approval
       - foobar:
           context: pkl-pr-approval
           requires:
