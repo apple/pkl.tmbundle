@@ -2,12 +2,6 @@
 version: 2.1
 
 jobs:
-  hold:
-    docker:
-      - image: cimg/base:current
-    steps:
-      - run: echo "Test"
-
   foobar:
     docker:
       - image: cimg/base:current
@@ -25,7 +19,8 @@ workflows:
         value: << pipeline.git.branch >>
         pattern: "^pull/\\d+(/head)?$"
     jobs:
-      - hold
+      - hold:
+          type: approval
       - foobar:
           context: pkl-pr-approval
           requires:
@@ -33,8 +28,10 @@ workflows:
 
   main:
     when:
-      equal:
-        - main
-        - << pipeline.git.branch >>
+      not:
+        equal:
+          - main
+          - << pipeline.git.branch >>
     jobs:
-      - foobar
+      - foobar:
+          context: pkl-pr-approval
