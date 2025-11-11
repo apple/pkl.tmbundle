@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  pr-approval: apple/pr-approval@0.1.0
+  pr-approval: circleci/node@7.2.1
 
 
 jobs:
