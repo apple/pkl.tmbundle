@@ -1,6 +1,7 @@
 # Generated from CircleCI.pkl. DO NOT EDIT.
 version: 2.1
 
+setup: true
 
 jobs:
   foobar:
