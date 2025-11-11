@@ -1,9 +1,6 @@
 # Generated from CircleCI.pkl. DO NOT EDIT.
 version: 2.1
 
-orbs:
-  pr-approval: simon-testaccount/testorb@1.0.2
-
 
 jobs:
   foobar:
@@ -25,7 +22,7 @@ workflows:
     jobs:
       - hold:
           type: approval
-      - pr-approval/authenticate:
+      - pr-approval-authenticate:
           context: pkl-pr-approval
       - foobar:
           context: pkl-pr-approval
