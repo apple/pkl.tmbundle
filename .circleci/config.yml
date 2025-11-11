@@ -28,10 +28,9 @@ workflows:
 
   main:
     when:
-      not:
-        equal:
-          - main
-          - << pipeline.git.branch >>
+      equal:
+        - main
+        - << pipeline.git.branch >>
     jobs:
       - foobar:
           context: pkl-pr-approval
