@@ -16,8 +16,8 @@
 
 amends "@pkl.impl.ghactions/PklCI.pkl"
 
+import "@com.github.actions/Workflow.pkl"
 import "@pkl.impl.ghactions/jobs/HawkeyeCheck.pkl"
-import "@gha/Workflow.pkl"
 
 build = testWorkflow
 
