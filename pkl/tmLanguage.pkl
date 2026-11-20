@@ -159,8 +159,18 @@ class IncludePattern extends Pattern {
   include: String
 }
 
+/// A rule that only groups other patterns.
+///
+/// This is useful for repository entries that are included from several places.
+class PatternList extends Pattern {
+  patterns: Listing<Pattern>
+}
+
 class Capture {
-  name: String
+  name: String = ""
+
+  /// Patterns that tokenize the captured text.
+  patterns: Listing<Pattern>?
 }
 
 hidden convertIncludePattern = (p) -> (p.toDynamic()) {
@@ -185,6 +195,7 @@ output {
       [MatchPattern] = skipIfEmpty
       [BeginEndPattern] = skipIfEmpty
       [IncludePattern] = skipIfEmpty
+      [PatternList] = skipIfEmpty
     }
   }
 }
