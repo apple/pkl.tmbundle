@@ -30,7 +30,6 @@
     "esbuild": "^0.28.2",
     "live-server": "^1.2.2",
     "onchange": "^7.1.0",
-    "plist": "^5.1.2",
     "shiki": "^4.6.0"
   }
 }
