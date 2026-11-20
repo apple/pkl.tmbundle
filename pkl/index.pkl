@@ -13,11 +13,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //===----------------------------------------------------------------------===//
+import "pkl.tmLanguage.pkl"
 
 output {
   files {
     local plistRenderer = new PListRenderer {}
-    ["syntaxes/pkl.tmLanguage"] = import("pkl.tmLanguage.pkl").output
+    local jsonRenderer = new JsonRenderer {}
+    ["syntaxes/pkl.tmLanguage"] {
+      value = `pkl.tmLanguage`
+      renderer = plistRenderer
+    }
+    ["syntaxes/pkl.tmLanguage.json"] {
+      value = `pkl.tmLanguage`
+      renderer = jsonRenderer
+    }
     for (name, snippet in import("snippets.pkl").snippets) {
       ["Snippets/\(name).tmSnippet"] {
         value = snippet

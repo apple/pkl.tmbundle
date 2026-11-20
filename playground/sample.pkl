@@ -1,0 +1,98 @@
+//===----------------------------------------------------------------------===//
+// Copyright © 2026 Apple Inc. and the Pkl project authors. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//===----------------------------------------------------------------------===//
+
+/// A sample module exercising Pkl syntax and the grammar rules in this bundle.
+module example.Birds
+
+import "pkl:json"
+import "pkl:math" as m
+import* "birds/*.pkl" as allBirds
+
+typealias Name = String(length.isBetween(1, 64))
+typealias Color = "red"|"green"|"blue"
+typealias Pair<A, B> = Mapping<A, B>
+typealias Callback = (Int, String) -> Boolean
+typealias Nested = Mapping<String, Listing<Mapping<String, Listing<Int>>>>?
+
+abstract class Animal<in T, out U> {
+  name: Name
+  /// Wingspan in centimeters.
+  wingspan: Number(isPositive)
+  hidden diet: Mapping<String, Listing<"Foo">>?
+  tags: Listing<String(length > 3)>(isDistinct) = new { "a"; "b" }
+  onFly: (Int) -> String
+  handlers: ((Int) -> String)?
+  `quoted-prop`: Int = 1
+}
+
+open class Bird<T> extends Animal<T, String> {
+  fly: Boolean = true
+  callbacks: Listing<(Int, String) -> Boolean> = new {}
+}
+
+class Parrot extends Bird<Int> {
+  phrases: Mapping<String, Int> = new { ["hello"] = 3; ["bye"] = 1 }
+}
+
+function identity<T>(elem: T): T = elem
+
+function describe(prefix: String, cb: (Int) -> String): String = "\(prefix)\(cb(1))"
+
+local function `odd name`(x: Int): Int = x + 1
+
+plainCall = identity(1)
+genericCall = identity<Int>(5)
+receiverCall = List(1, 2, 3).map((n) -> n * 2).toList()
+nestedCall = identity<Map<String, List<Int?>>>(Map("a", List(1)))
+comparison = 1 < 2 && 3 > 2
+
+`my-value` = 1
+quotedUse = `my-value` + 2
+generated = new Listing {
+  for (`a-key`, `a value` in Map("x", 1)) {
+    `a-key`
+  }
+}
+
+env = read?("env:HOME")
+glob = read*("file:/tmp/*.txt")
+nullish = env ?? throw("no HOME")
+pigeon: Bird<Int> = new { name = "Pidgy"; wingspan = 0x2A + 1_000 * 1.5e3 }
+asCast = (pigeon as Animal<Int, String>).name
+isCheck = pigeon is Bird<Int>|Parrot
+typed = new Listing<Int> { 1; 2; 3 }
+conditional = if (pigeon.fly) "flies" else "walks"
+bound = let (z = 3) z + 1
+
+greeting = "Hello, \(pigeon.name)! 1 + 2 = \(1 + 2); nested: \(identity("in \(env)")) \u{1F426}\n"
+
+raw = #"raw \#(identity<String>("x")) and \(not interpolated) and "quotes""#
+
+multi = """
+  Multi-line string with \(1 + (2 * 3)) interpolation
+  and a line continuation \
+  that is joined to the previous line.
+  A backslash \ in the middle of a line is an invalid escape (intentional, to preview it).
+  """
+
+rawMulti = #"""
+  Raw multi-line \#(1 + 2) \
+  continued, but a plain \ is not an escape here.
+  """#
+
+output {
+  renderer = new JsonRenderer {}
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pkl TextMate Grammar Playground</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 14px system-ui, sans-serif; display: flex; flex-direction: column; height: 100vh; }
+    header { display: flex; gap: 1rem; align-items: center; padding: .5rem 1rem; border-bottom: 1px solid #8884; }
+    header h1 { font-size: 1rem; margin: 0; flex: 1; }
+    main { flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: 0; }
+    textarea, #output { margin: 0; padding: 1rem; overflow: auto; border: 0; outline: 0; resize: none;
+      font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; tab-size: 2; }
+    textarea { border-right: 1px solid #8884; }
+    #output pre { margin: 0; font: inherit; }
+    #output code { display: block; }
+    #output .line { display: block; min-height: 1.5em; }
+    #output span[data-i] { cursor: default; }
+    #output span[data-i]:hover { outline: 1px solid #f80; }
+    #scopes { padding: .5rem 1rem; border-top: 1px solid #8884; font: 12px ui-monospace, Menlo, monospace;
+      min-height: 5.5em; white-space: pre; overflow: auto; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Pkl TextMate Grammar Playground</h1>
+    <label>Theme <select id="theme"></select></label>
+  </header>
+  <main>
+    <textarea id="input" spellcheck="false" autocomplete="off"></textarea>
+    <div id="output"></div>
+  </main>
+  <div id="scopes">Hover over a token to see its scopes.</div>
+  <script src="main.js"></script>
+</body>
+</html>

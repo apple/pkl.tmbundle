@@ -15,11 +15,17 @@
   <string>\{</string>
   <key>foldingStopMarker</key>
   <string>}</string>
+  <key>firstLineMatch</key>
+  <string></string>
+  <key>injectionSelector</key>
+  <string></string>
   <key>uuid</key>
   <string>0598575b-33f4-42c1-b797-5b93a6cfc03a</string>
   <key>patterns</key>
   <array>
     <dict>
+      <key>name</key>
+      <string></string>
       <key>match</key>
       <string>(?x:
   \b
@@ -44,6 +50,8 @@
       </dict>
     </dict>
     <dict>
+      <key>name</key>
+      <string></string>
       <key>match</key>
       <string>(?x:
   (typealias)
@@ -111,6 +119,8 @@
       </dict>
     </dict>
     <dict>
+      <key>name</key>
+      <string></string>
       <key>match</key>
       <string>(?x:
   \b(for)
@@ -144,6 +154,8 @@
       </dict>
     </dict>
     <dict>
+      <key>name</key>
+      <string></string>
       <key>match</key>
       <string>\b(new)\s+((?x:
   (?x:
@@ -181,6 +193,8 @@
       </dict>
     </dict>
     <dict>
+      <key>name</key>
+      <string></string>
       <key>match</key>
       <string>\b(function)\s+([\p{L}_$][\p{L}0-9_$]*)</string>
       <key>captures</key>
@@ -198,6 +212,8 @@
       </dict>
     </dict>
     <dict>
+      <key>name</key>
+      <string></string>
       <key>match</key>
       <string>\b(as)\s+((?x:
   (?x:
@@ -253,8 +269,12 @@
       <string>/\*</string>
       <key>end</key>
       <string>\*/</string>
+      <key>contentName</key>
+      <string></string>
     </dict>
     <dict>
+      <key>name</key>
+      <string></string>
       <key>begin</key>
       <string>(?x:
   (
@@ -307,8 +327,12 @@
           <string>entity.name.type.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
     </dict>
     <dict>
+      <key>name</key>
+      <string></string>
       <key>match</key>
       <string>(?x:
   (
@@ -334,6 +358,8 @@
       </dict>
     </dict>
     <dict>
+      <key>name</key>
+      <string></string>
       <key>match</key>
       <string>(:)\s*((?x:
   (?x:
@@ -371,6 +397,8 @@
       </dict>
     </dict>
     <dict>
+      <key>name</key>
+      <string></string>
       <key>match</key>
       <string>^\s*([\p{L}_$][\p{L}0-9_$]*)\s*\{</string>
       <key>captures</key>
@@ -572,6 +600,8 @@
           <string>punctuation.delimiter.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -641,6 +671,8 @@
           <string>invalid.illegal.newline.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -693,6 +725,8 @@
           <string>punctuation.delimiter.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -762,6 +796,8 @@
           <string>invalid.illegal.newline.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -814,6 +850,8 @@
           <string>punctuation.delimiter.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -883,6 +921,8 @@
           <string>invalid.illegal.newline.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -935,6 +975,8 @@
           <string>punctuation.delimiter.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -1004,6 +1046,8 @@
           <string>invalid.illegal.newline.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -1056,6 +1100,8 @@
           <string>punctuation.delimiter.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -1125,6 +1171,8 @@
           <string>invalid.illegal.newline.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -1177,6 +1225,8 @@
           <string>punctuation.delimiter.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -1246,6 +1296,8 @@
           <string>invalid.illegal.newline.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -1298,6 +1350,8 @@
           <string>punctuation.delimiter.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
@@ -1367,6 +1421,8 @@
           <string>invalid.illegal.newline.pkl</string>
         </dict>
       </dict>
+      <key>contentName</key>
+      <string></string>
       <key>patterns</key>
       <array>
         <dict>
