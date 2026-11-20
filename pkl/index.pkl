@@ -15,8 +15,6 @@
 //===----------------------------------------------------------------------===//
 import "pkl.tmLanguage.pkl"
 
-import "pkl.tmLanguage.pkl"
-
 output {
   files {
     local plistRenderer = new PListRenderer {}
