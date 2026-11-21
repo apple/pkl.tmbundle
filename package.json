@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/apple/pkl.tmbundle#readme",
   "devDependencies": {
+    "@shikijs/langs": "^4.6.0",
     "@shikijs/themes": "^4.6.0",
     "esbuild": "^0.28.2",
     "live-server": "^1.2.2",

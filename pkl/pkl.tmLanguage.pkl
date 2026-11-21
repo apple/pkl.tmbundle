@@ -76,7 +76,9 @@ local function interpolation(numPounds: Int): BeginEndPattern = new {
   }
 }
 
-local function singlelineString(numPounds: Int): BeginEndPattern = new {
+/// A single-line string. [embedded] are additional patterns for the contents of the string,
+/// which are matched after string escapes and interpolation.
+local function singlelineString(numPounds: Int, embedded: Listing<Pattern>): BeginEndPattern = new {
   name = "string.quoted.double.\(numPounds).pkl"
   local pounds = "#".repeat(numPounds)
   local stringStart = "(" + pounds + "\"" + ")"
@@ -99,6 +101,7 @@ local function singlelineString(numPounds: Int): BeginEndPattern = new {
   patterns {
     interpolation(numPounds)
     escape(numPounds)
+    for (pattern in embedded) { pattern }
   }
 }
 
@@ -159,6 +162,63 @@ local languageConstant: Pattern = new KeywordMatchPattern {
     "null"
   }
 }.pattern
+
+local docComment: BeginWhilePattern = new {
+  begin = "^\\s*(/// ?)"
+  beginCaptures {
+    ["1"] {
+      name = "punctuation.definition.comment.pkl"
+    }
+  }
+  while = "^\\s*(/// ?)"
+  whileCaptures {
+    ["1"] {
+      name = "punctuation.definition.comment.pkl"
+    }
+  }
+  name = "comment.line.documentation.pkl"
+  contentName = "meta.embedded.block.markdown"
+  patterns {
+    new IncludePattern {
+      include = "text.html.markdown"
+    }
+  }
+}
+
+/// A regex literal, e.g. `Regex("\\d+")` or `Regex(#"\d+"#)`.
+///
+/// The contents of the string are tokenized as a regular expression, using the `source.regexp.python` grammar,
+/// which is the most widely available regular expression grammar.
+/// Pkl string escapes and interpolation take precedence, so in a regular string like `"\\d"`,
+/// the escaped backslash is a string escape. Use a raw string (`#"\d"#`) to get regular expression highlighting.
+local function regexCall(numPounds: Int): BeginEndPattern = new {
+  local pounds = "#".repeat(numPounds)
+  name = "meta.function-call.pkl"
+  // Only match if the argument is a string with the right number of pounds.
+  begin = #"(?<![\p{L}0-9_$.])(Regex)\s*(\()\s*(?=\#(pounds)")"#
+  beginCaptures {
+    ["1"] {
+      name = "variable.function.pkl"
+    }
+    ["2"] {
+      name = "meta.brace.pkl"
+    }
+  }
+  // Also end at the end of the line, so that an unterminated string does not swallow the rest of the file.
+  end = #"\)|$"#
+  endCaptures {
+    ["0"] {
+      name = "meta.brace.pkl"
+    }
+  }
+  patterns {
+    singlelineString(numPounds, regexpPatterns)
+  }
+}
+
+local regexpPatterns: Listing<Pattern> = new {
+  new IncludePattern { include = "source.regexp.python" }
+}
 
 local lineComment: MatchPattern = new {
   name = "comment.line.pkl"
@@ -641,7 +701,7 @@ local typeReference: Listing<Pattern> = new {
 local stringPatterns: Listing<Pattern> = new {
   for (numPounds in IntSeq(0, 6)) {
     multilineString(numPounds)
-    singlelineString(numPounds)
+    singlelineString(numPounds, new {})
   }
 }
 
@@ -805,11 +865,13 @@ patterns {
   typeTestPattern
   extendsPattern
   languageConstant
+  docComment
   lineComment
   blockComment
   variableDeclType
   variableDecl
   typeAnnotation
+  new IncludePattern { include = "#regex" }
   functionCall
   amendedVar
   modifier
@@ -834,6 +896,13 @@ patterns {
 
 repository {
   ["strings"] = new PatternList { patterns = stringPatterns }
+  ["regex"] = new PatternList {
+    patterns {
+      for (numPounds in IntSeq(0, 6)) {
+        regexCall(numPounds)
+      }
+    }
+  }
   ["type"] = new PatternList { patterns = typePatterns }
   ["generic-type"] = genericType
   ["parentheses"] = parentheses

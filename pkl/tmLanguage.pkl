@@ -146,6 +146,29 @@ class BeginEndPattern extends NamedPattern {
   patterns: Listing<Pattern>?
 }
 
+class BeginWhilePattern extends NamedPattern {
+  /// The pattern that starts the block.
+  @SourceCode { language = "RegExp" }
+  begin: String
+
+  /// Assign attributes to the captures of the [begin] pattern.
+  beginCaptures: Mapping<String, Capture>?
+
+  /// The pattern to keep matching on.
+  @SourceCode { language = "RegExp" }
+  while: String
+
+  /// Assign attributes to the captures of the [while] pattern.
+  whileCaptures: Mapping<String, Capture>?
+
+  /// Similar to the [name] key but only assigns the name to the text *between* what
+  /// is matched by the [begin]/[end] patterns.
+  contentName: String = ""
+
+  /// Applies to the region between the begin and while matches
+  patterns: Listing<Pattern>?
+}
+
 class IncludePattern extends Pattern {
   /// The pattern or grammar to include. The following kinds of includes are supported:
   ///

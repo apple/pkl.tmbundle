@@ -306,6 +306,39 @@
     </dict>
     <dict>
       <key>name</key>
+      <string>comment.line.documentation.pkl</string>
+      <key>begin</key>
+      <string>^\s*(/// ?)</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.comment.pkl</string>
+        </dict>
+      </dict>
+      <key>while</key>
+      <string>^\s*(/// ?)</string>
+      <key>whileCaptures</key>
+      <dict>
+        <key>1</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.comment.pkl</string>
+        </dict>
+      </dict>
+      <key>contentName</key>
+      <string>meta.embedded.block.markdown</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>text.html.markdown</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>name</key>
       <string>comment.line.pkl</string>
       <key>match</key>
       <string>//.*</string>
@@ -412,6 +445,10 @@
           <string>#type</string>
         </dict>
       </array>
+    </dict>
+    <dict>
+      <key>include</key>
+      <string>#regex</string>
     </dict>
     <dict>
       <key>name</key>
@@ -1950,6 +1987,950 @@
                   <string>invalid.illegal.unrecognized-string-escape.pkl</string>
                 </dict>
               </dict>
+            </dict>
+          </array>
+        </dict>
+      </array>
+    </dict>
+    <key>regex</key>
+    <dict>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>meta.function-call.pkl</string>
+          <key>begin</key>
+          <string>(?&lt;![\p{L}0-9_$.])(Regex)\s*(\()\s*(?=&quot;)</string>
+          <key>beginCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>variable.function.pkl</string>
+            </dict>
+            <key>2</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>end</key>
+          <string>\)|$</string>
+          <key>endCaptures</key>
+          <dict>
+            <key>0</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>contentName</key>
+          <string></string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>name</key>
+              <string>string.quoted.double.0.pkl</string>
+              <key>begin</key>
+              <string>(&quot;)</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimiter.pkl</string>
+                </dict>
+              </dict>
+              <key>end</key>
+              <string>(?x:
+  (&quot;)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+              <key>endCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimimter.pkl</string>
+                </dict>
+                <key>2</key>
+                <dict>
+                  <key>name</key>
+                  <string>invalid.illegal.newline.pkl</string>
+                </dict>
+              </dict>
+              <key>contentName</key>
+              <string></string>
+              <key>patterns</key>
+              <array>
+                <dict>
+                  <key>name</key>
+                  <string></string>
+                  <key>begin</key>
+                  <string>\\\(</string>
+                  <key>end</key>
+                  <string>\)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>0</key>
+                    <dict>
+                      <key>name</key>
+                      <string>constant.character.escape.0.pkl</string>
+                    </dict>
+                  </dict>
+                  <key>contentName</key>
+                  <string>meta.interpolation.pkl</string>
+                  <key>patterns</key>
+                  <array>
+                    <dict>
+                      <key>include</key>
+                      <string>#parentheses</string>
+                    </dict>
+                    <dict>
+                      <key>include</key>
+                      <string>$self</string>
+                    </dict>
+                  </array>
+                </dict>
+                <dict>
+                  <key>name</key>
+                  <string>constant.character.escape.0.pkl</string>
+                  <key>match</key>
+                  <string>(?x:                 # turn on extended mode
+  \\
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\   # the escape char
+    .                # any character
+  )
+)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>1</key>
+                    <dict>
+                      <key>name</key>
+                      <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+                    </dict>
+                  </dict>
+                </dict>
+                <dict>
+                  <key>include</key>
+                  <string>source.regexp.python</string>
+                </dict>
+              </array>
+            </dict>
+          </array>
+        </dict>
+        <dict>
+          <key>name</key>
+          <string>meta.function-call.pkl</string>
+          <key>begin</key>
+          <string>(?&lt;![\p{L}0-9_$.])(Regex)\s*(\()\s*(?=#&quot;)</string>
+          <key>beginCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>variable.function.pkl</string>
+            </dict>
+            <key>2</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>end</key>
+          <string>\)|$</string>
+          <key>endCaptures</key>
+          <dict>
+            <key>0</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>contentName</key>
+          <string></string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>name</key>
+              <string>string.quoted.double.1.pkl</string>
+              <key>begin</key>
+              <string>(#&quot;)</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimiter.pkl</string>
+                </dict>
+              </dict>
+              <key>end</key>
+              <string>(?x:
+  (&quot;\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+              <key>endCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimimter.pkl</string>
+                </dict>
+                <key>2</key>
+                <dict>
+                  <key>name</key>
+                  <string>invalid.illegal.newline.pkl</string>
+                </dict>
+              </dict>
+              <key>contentName</key>
+              <string></string>
+              <key>patterns</key>
+              <array>
+                <dict>
+                  <key>name</key>
+                  <string></string>
+                  <key>begin</key>
+                  <string>\\\#\(</string>
+                  <key>end</key>
+                  <string>\)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>0</key>
+                    <dict>
+                      <key>name</key>
+                      <string>constant.character.escape.1.pkl</string>
+                    </dict>
+                  </dict>
+                  <key>contentName</key>
+                  <string>meta.interpolation.pkl</string>
+                  <key>patterns</key>
+                  <array>
+                    <dict>
+                      <key>include</key>
+                      <string>#parentheses</string>
+                    </dict>
+                    <dict>
+                      <key>include</key>
+                      <string>$self</string>
+                    </dict>
+                  </array>
+                </dict>
+                <dict>
+                  <key>name</key>
+                  <string>constant.character.escape.1.pkl</string>
+                  <key>match</key>
+                  <string>(?x:                 # turn on extended mode
+  \\\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#   # the escape char
+    .                # any character
+  )
+)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>1</key>
+                    <dict>
+                      <key>name</key>
+                      <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+                    </dict>
+                  </dict>
+                </dict>
+                <dict>
+                  <key>include</key>
+                  <string>source.regexp.python</string>
+                </dict>
+              </array>
+            </dict>
+          </array>
+        </dict>
+        <dict>
+          <key>name</key>
+          <string>meta.function-call.pkl</string>
+          <key>begin</key>
+          <string>(?&lt;![\p{L}0-9_$.])(Regex)\s*(\()\s*(?=##&quot;)</string>
+          <key>beginCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>variable.function.pkl</string>
+            </dict>
+            <key>2</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>end</key>
+          <string>\)|$</string>
+          <key>endCaptures</key>
+          <dict>
+            <key>0</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>contentName</key>
+          <string></string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>name</key>
+              <string>string.quoted.double.2.pkl</string>
+              <key>begin</key>
+              <string>(##&quot;)</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimiter.pkl</string>
+                </dict>
+              </dict>
+              <key>end</key>
+              <string>(?x:
+  (&quot;\#\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+              <key>endCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimimter.pkl</string>
+                </dict>
+                <key>2</key>
+                <dict>
+                  <key>name</key>
+                  <string>invalid.illegal.newline.pkl</string>
+                </dict>
+              </dict>
+              <key>contentName</key>
+              <string></string>
+              <key>patterns</key>
+              <array>
+                <dict>
+                  <key>name</key>
+                  <string></string>
+                  <key>begin</key>
+                  <string>\\\#\#\(</string>
+                  <key>end</key>
+                  <string>\)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>0</key>
+                    <dict>
+                      <key>name</key>
+                      <string>constant.character.escape.2.pkl</string>
+                    </dict>
+                  </dict>
+                  <key>contentName</key>
+                  <string>meta.interpolation.pkl</string>
+                  <key>patterns</key>
+                  <array>
+                    <dict>
+                      <key>include</key>
+                      <string>#parentheses</string>
+                    </dict>
+                    <dict>
+                      <key>include</key>
+                      <string>$self</string>
+                    </dict>
+                  </array>
+                </dict>
+                <dict>
+                  <key>name</key>
+                  <string>constant.character.escape.2.pkl</string>
+                  <key>match</key>
+                  <string>(?x:                 # turn on extended mode
+  \\\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>1</key>
+                    <dict>
+                      <key>name</key>
+                      <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+                    </dict>
+                  </dict>
+                </dict>
+                <dict>
+                  <key>include</key>
+                  <string>source.regexp.python</string>
+                </dict>
+              </array>
+            </dict>
+          </array>
+        </dict>
+        <dict>
+          <key>name</key>
+          <string>meta.function-call.pkl</string>
+          <key>begin</key>
+          <string>(?&lt;![\p{L}0-9_$.])(Regex)\s*(\()\s*(?=###&quot;)</string>
+          <key>beginCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>variable.function.pkl</string>
+            </dict>
+            <key>2</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>end</key>
+          <string>\)|$</string>
+          <key>endCaptures</key>
+          <dict>
+            <key>0</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>contentName</key>
+          <string></string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>name</key>
+              <string>string.quoted.double.3.pkl</string>
+              <key>begin</key>
+              <string>(###&quot;)</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimiter.pkl</string>
+                </dict>
+              </dict>
+              <key>end</key>
+              <string>(?x:
+  (&quot;\#\#\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+              <key>endCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimimter.pkl</string>
+                </dict>
+                <key>2</key>
+                <dict>
+                  <key>name</key>
+                  <string>invalid.illegal.newline.pkl</string>
+                </dict>
+              </dict>
+              <key>contentName</key>
+              <string></string>
+              <key>patterns</key>
+              <array>
+                <dict>
+                  <key>name</key>
+                  <string></string>
+                  <key>begin</key>
+                  <string>\\\#\#\#\(</string>
+                  <key>end</key>
+                  <string>\)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>0</key>
+                    <dict>
+                      <key>name</key>
+                      <string>constant.character.escape.3.pkl</string>
+                    </dict>
+                  </dict>
+                  <key>contentName</key>
+                  <string>meta.interpolation.pkl</string>
+                  <key>patterns</key>
+                  <array>
+                    <dict>
+                      <key>include</key>
+                      <string>#parentheses</string>
+                    </dict>
+                    <dict>
+                      <key>include</key>
+                      <string>$self</string>
+                    </dict>
+                  </array>
+                </dict>
+                <dict>
+                  <key>name</key>
+                  <string>constant.character.escape.3.pkl</string>
+                  <key>match</key>
+                  <string>(?x:                 # turn on extended mode
+  \\\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>1</key>
+                    <dict>
+                      <key>name</key>
+                      <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+                    </dict>
+                  </dict>
+                </dict>
+                <dict>
+                  <key>include</key>
+                  <string>source.regexp.python</string>
+                </dict>
+              </array>
+            </dict>
+          </array>
+        </dict>
+        <dict>
+          <key>name</key>
+          <string>meta.function-call.pkl</string>
+          <key>begin</key>
+          <string>(?&lt;![\p{L}0-9_$.])(Regex)\s*(\()\s*(?=####&quot;)</string>
+          <key>beginCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>variable.function.pkl</string>
+            </dict>
+            <key>2</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>end</key>
+          <string>\)|$</string>
+          <key>endCaptures</key>
+          <dict>
+            <key>0</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>contentName</key>
+          <string></string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>name</key>
+              <string>string.quoted.double.4.pkl</string>
+              <key>begin</key>
+              <string>(####&quot;)</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimiter.pkl</string>
+                </dict>
+              </dict>
+              <key>end</key>
+              <string>(?x:
+  (&quot;\#\#\#\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+              <key>endCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimimter.pkl</string>
+                </dict>
+                <key>2</key>
+                <dict>
+                  <key>name</key>
+                  <string>invalid.illegal.newline.pkl</string>
+                </dict>
+              </dict>
+              <key>contentName</key>
+              <string></string>
+              <key>patterns</key>
+              <array>
+                <dict>
+                  <key>name</key>
+                  <string></string>
+                  <key>begin</key>
+                  <string>\\\#\#\#\#\(</string>
+                  <key>end</key>
+                  <string>\)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>0</key>
+                    <dict>
+                      <key>name</key>
+                      <string>constant.character.escape.4.pkl</string>
+                    </dict>
+                  </dict>
+                  <key>contentName</key>
+                  <string>meta.interpolation.pkl</string>
+                  <key>patterns</key>
+                  <array>
+                    <dict>
+                      <key>include</key>
+                      <string>#parentheses</string>
+                    </dict>
+                    <dict>
+                      <key>include</key>
+                      <string>$self</string>
+                    </dict>
+                  </array>
+                </dict>
+                <dict>
+                  <key>name</key>
+                  <string>constant.character.escape.4.pkl</string>
+                  <key>match</key>
+                  <string>(?x:                 # turn on extended mode
+  \\\#\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>1</key>
+                    <dict>
+                      <key>name</key>
+                      <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+                    </dict>
+                  </dict>
+                </dict>
+                <dict>
+                  <key>include</key>
+                  <string>source.regexp.python</string>
+                </dict>
+              </array>
+            </dict>
+          </array>
+        </dict>
+        <dict>
+          <key>name</key>
+          <string>meta.function-call.pkl</string>
+          <key>begin</key>
+          <string>(?&lt;![\p{L}0-9_$.])(Regex)\s*(\()\s*(?=#####&quot;)</string>
+          <key>beginCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>variable.function.pkl</string>
+            </dict>
+            <key>2</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>end</key>
+          <string>\)|$</string>
+          <key>endCaptures</key>
+          <dict>
+            <key>0</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>contentName</key>
+          <string></string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>name</key>
+              <string>string.quoted.double.5.pkl</string>
+              <key>begin</key>
+              <string>(#####&quot;)</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimiter.pkl</string>
+                </dict>
+              </dict>
+              <key>end</key>
+              <string>(?x:
+  (&quot;\#\#\#\#\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+              <key>endCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimimter.pkl</string>
+                </dict>
+                <key>2</key>
+                <dict>
+                  <key>name</key>
+                  <string>invalid.illegal.newline.pkl</string>
+                </dict>
+              </dict>
+              <key>contentName</key>
+              <string></string>
+              <key>patterns</key>
+              <array>
+                <dict>
+                  <key>name</key>
+                  <string></string>
+                  <key>begin</key>
+                  <string>\\\#\#\#\#\#\(</string>
+                  <key>end</key>
+                  <string>\)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>0</key>
+                    <dict>
+                      <key>name</key>
+                      <string>constant.character.escape.5.pkl</string>
+                    </dict>
+                  </dict>
+                  <key>contentName</key>
+                  <string>meta.interpolation.pkl</string>
+                  <key>patterns</key>
+                  <array>
+                    <dict>
+                      <key>include</key>
+                      <string>#parentheses</string>
+                    </dict>
+                    <dict>
+                      <key>include</key>
+                      <string>$self</string>
+                    </dict>
+                  </array>
+                </dict>
+                <dict>
+                  <key>name</key>
+                  <string>constant.character.escape.5.pkl</string>
+                  <key>match</key>
+                  <string>(?x:                 # turn on extended mode
+  \\\#\#\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>1</key>
+                    <dict>
+                      <key>name</key>
+                      <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+                    </dict>
+                  </dict>
+                </dict>
+                <dict>
+                  <key>include</key>
+                  <string>source.regexp.python</string>
+                </dict>
+              </array>
+            </dict>
+          </array>
+        </dict>
+        <dict>
+          <key>name</key>
+          <string>meta.function-call.pkl</string>
+          <key>begin</key>
+          <string>(?&lt;![\p{L}0-9_$.])(Regex)\s*(\()\s*(?=######&quot;)</string>
+          <key>beginCaptures</key>
+          <dict>
+            <key>1</key>
+            <dict>
+              <key>name</key>
+              <string>variable.function.pkl</string>
+            </dict>
+            <key>2</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>end</key>
+          <string>\)|$</string>
+          <key>endCaptures</key>
+          <dict>
+            <key>0</key>
+            <dict>
+              <key>name</key>
+              <string>meta.brace.pkl</string>
+            </dict>
+          </dict>
+          <key>contentName</key>
+          <string></string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>name</key>
+              <string>string.quoted.double.6.pkl</string>
+              <key>begin</key>
+              <string>(######&quot;)</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimiter.pkl</string>
+                </dict>
+              </dict>
+              <key>end</key>
+              <string>(?x:
+  (&quot;\#\#\#\#\#\#)         # string end
+  |                     # OR
+  (.?$)                 # error; unterminated string (flag last character as an error)
+)</string>
+              <key>endCaptures</key>
+              <dict>
+                <key>1</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.delimimter.pkl</string>
+                </dict>
+                <key>2</key>
+                <dict>
+                  <key>name</key>
+                  <string>invalid.illegal.newline.pkl</string>
+                </dict>
+              </dict>
+              <key>contentName</key>
+              <string></string>
+              <key>patterns</key>
+              <array>
+                <dict>
+                  <key>name</key>
+                  <string></string>
+                  <key>begin</key>
+                  <string>\\\#\#\#\#\#\#\(</string>
+                  <key>end</key>
+                  <string>\)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>0</key>
+                    <dict>
+                      <key>name</key>
+                      <string>constant.character.escape.6.pkl</string>
+                    </dict>
+                  </dict>
+                  <key>contentName</key>
+                  <string>meta.interpolation.pkl</string>
+                  <key>patterns</key>
+                  <array>
+                    <dict>
+                      <key>include</key>
+                      <string>#parentheses</string>
+                    </dict>
+                    <dict>
+                      <key>include</key>
+                      <string>$self</string>
+                    </dict>
+                  </array>
+                </dict>
+                <dict>
+                  <key>name</key>
+                  <string>constant.character.escape.6.pkl</string>
+                  <key>match</key>
+                  <string>(?x:                 # turn on extended mode
+  \\\#\#\#\#\#\#
+  (?:
+    [trn&quot;\\]         # tab, carriage return, newline, quote, backslash
+    |                # OR
+    u                # the letter u
+    \{               # curly opening brace literal
+    [\da-fA-F]+      # 1 or more hex number literal
+    }                # curly end literal
+  )
+  |                  # OR
+  (                  # capture group: invalid escape
+    \\\#\#\#\#\#\#   # the escape char
+    .                # any character
+  )
+)</string>
+                  <key>captures</key>
+                  <dict>
+                    <key>1</key>
+                    <dict>
+                      <key>name</key>
+                      <string>invalid.illegal.unrecognized-string-escape.pkl</string>
+                    </dict>
+                  </dict>
+                </dict>
+                <dict>
+                  <key>include</key>
+                  <string>source.regexp.python</string>
+                </dict>
+              </array>
             </dict>
           </array>
         </dict>
