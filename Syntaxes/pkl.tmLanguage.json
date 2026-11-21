@@ -179,27 +179,6 @@
       "match": "\\b(false|true|null)(?!\\w)"
     },
     {
-      "name": "comment.line.documentation.pkl",
-      "begin": "^\\s*(/// ?)",
-      "beginCaptures": {
-        "1": {
-          "name": "punctuation.definition.comment.pkl"
-        }
-      },
-      "while": "^\\s*(/// ?)",
-      "whileCaptures": {
-        "1": {
-          "name": "punctuation.definition.comment.pkl"
-        }
-      },
-      "contentName": "meta.embedded.block.markdown",
-      "patterns": [
-        {
-          "include": "text.html.markdown"
-        }
-      ]
-    },
-    {
       "name": "comment.line.pkl",
       "match": "//.*"
     },

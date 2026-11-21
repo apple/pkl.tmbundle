@@ -163,28 +163,6 @@ local languageConstant: Pattern = new KeywordMatchPattern {
   }
 }.pattern
 
-local docComment: BeginWhilePattern = new {
-  begin = "^\\s*(/// ?)"
-  beginCaptures {
-    ["1"] {
-      name = "punctuation.definition.comment.pkl"
-    }
-  }
-  while = "^\\s*(/// ?)"
-  whileCaptures {
-    ["1"] {
-      name = "punctuation.definition.comment.pkl"
-    }
-  }
-  name = "comment.line.documentation.pkl"
-  contentName = "meta.embedded.block.markdown"
-  patterns {
-    new IncludePattern {
-      include = "text.html.markdown"
-    }
-  }
-}
-
 /// A regex literal, e.g. `Regex("\\d+")` or `Regex(#"\d+"#)`.
 ///
 /// The contents of the string are tokenized as a regular expression, using the `source.regexp.python` grammar,
@@ -865,7 +843,6 @@ patterns {
   typeTestPattern
   extendsPattern
   languageConstant
-  docComment
   lineComment
   blockComment
   variableDeclType

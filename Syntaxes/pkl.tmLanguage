@@ -306,39 +306,6 @@
     </dict>
     <dict>
       <key>name</key>
-      <string>comment.line.documentation.pkl</string>
-      <key>begin</key>
-      <string>^\s*(/// ?)</string>
-      <key>beginCaptures</key>
-      <dict>
-        <key>1</key>
-        <dict>
-          <key>name</key>
-          <string>punctuation.definition.comment.pkl</string>
-        </dict>
-      </dict>
-      <key>while</key>
-      <string>^\s*(/// ?)</string>
-      <key>whileCaptures</key>
-      <dict>
-        <key>1</key>
-        <dict>
-          <key>name</key>
-          <string>punctuation.definition.comment.pkl</string>
-        </dict>
-      </dict>
-      <key>contentName</key>
-      <string>meta.embedded.block.markdown</string>
-      <key>patterns</key>
-      <array>
-        <dict>
-          <key>include</key>
-          <string>text.html.markdown</string>
-        </dict>
-      </array>
-    </dict>
-    <dict>
-      <key>name</key>
       <string>comment.line.pkl</string>
       <key>match</key>
       <string>//.*</string>
