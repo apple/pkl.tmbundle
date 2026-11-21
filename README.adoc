@@ -6,3 +6,10 @@ Have Pkl installed in your path.
 
 Change the grammar or snippets in the `pkl` folder. +
 Run `npm run build` to generate the syntax and snippet files.
+
+=== Playground
+
+There is a playground to preview syntax highlighting changes in the browser.
+
+To run the playground, run `npm run playground`.
+This will start a live-reload server that automatically reloads when changes are made to the syntax.

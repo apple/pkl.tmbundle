@@ -1,5 +1,5 @@
 //===----------------------------------------------------------------------===//
-// Copyright © 2024-2025 Apple Inc. and the Pkl project authors. All rights reserved.
+// Copyright © 2024-2026 Apple Inc. and the Pkl project authors. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,10 +14,20 @@
 // limitations under the License.
 //===----------------------------------------------------------------------===//
 
+import "pkl.tmLanguage.pkl"
+
 output {
   files {
     local plistRenderer = new PListRenderer {}
-    ["syntaxes/pkl.tmLanguage"] = import("pkl.tmLanguage.pkl").output
+    local jsonRenderer = new JsonRenderer {}
+    ["syntaxes/pkl.tmLanguage"] {
+      value = `pkl.tmLanguage`
+      renderer = plistRenderer
+    }
+    ["syntaxes/pkl.tmLanguage.json"] {
+      value = `pkl.tmLanguage`
+      renderer = jsonRenderer
+    }
     for (name, snippet in import("snippets.pkl").snippets) {
       ["Snippets/\(name).tmSnippet"] {
         value = snippet

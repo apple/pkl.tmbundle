@@ -1,5 +1,5 @@
 //===----------------------------------------------------------------------===//
-// Copyright © 2024-2025 Apple Inc. and the Pkl project authors. All rights reserved.
+// Copyright © 2024-2026 Apple Inc. and the Pkl project authors. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -44,10 +44,6 @@ local function escape(numPounds: Int): MatchPattern = new {
         \{               # curly opening brace literal
         [\da-fA-F]+      # 1 or more hex number literal
         }                # curly end literal
-        |                # OR
-        \(               # interpolation start
-        .+?              # one or more characters lazily (correct syntax highlighting within here should be provided by semantic tokens)
-        \)               # interpolation end
       )
       |                  # OR
       (                  # capture group: invalid escape
@@ -60,6 +56,23 @@ local function escape(numPounds: Int): MatchPattern = new {
     ["1"] {
       name = "invalid.illegal.unrecognized-string-escape.pkl"
     }
+  }
+}
+
+/// String interpolation, e.g. `\(foo)`. The interpolated expression is tokenized as regular Pkl code.
+local function interpolation(numPounds: Int): BeginEndPattern = new {
+  local escapeChar = #"\\"# + "\\#".repeat(numPounds)
+  contentName = "meta.interpolation.pkl"
+  begin = #"\#(escapeChar)\("#
+  end = #"\)"#
+  captures {
+    ["0"] {
+      name = "constant.character.escape.\(numPounds).pkl"
+    }
+  }
+  patterns {
+    new IncludePattern { include = "#parentheses" }
+    new IncludePattern { include = "$self" }
   }
 }
 
@@ -84,8 +97,17 @@ local function singlelineString(numPounds: Int): BeginEndPattern = new {
     ["2"] { name = "invalid.illegal.newline.pkl" }
   }
   patterns {
+    interpolation(numPounds)
     escape(numPounds)
   }
+}
+
+/// A line continuation in a multiline string: an escape character that is immediately followed by a newline
+/// (LF or CRLF), e.g. a `\` at the end of a line.
+local function lineContinuation(numPounds: Int): MatchPattern = new {
+  local escapeChar = #"\\"# + "\\#".repeat(numPounds)
+  name = "constant.character.escape.\(numPounds).pkl"
+  match = #"\#(escapeChar)(?=\r?$)"#
 }
 
 local function multilineString(numPounds: Int): BeginEndPattern = new {
@@ -103,34 +125,30 @@ local function multilineString(numPounds: Int): BeginEndPattern = new {
     }
   }
   patterns {
+    lineContinuation(numPounds)
+    interpolation(numPounds)
     escape(numPounds)
   }
 }
 
+/// Matches an identifier, plain (`foo`) or quoted (`` `foo-bar` ``).
 @SourceCode { language = "RegExp" }
-local identRegex: String = #"[\p{L}_$][\p{L}0-9_$]*"#
+local identRegex: String = #"(?:[\p{L}_$][\p{L}0-9_$]*|`[^`]+`)"#
 
-@SourceCode { language = "RegExp" }
-local baseTypeRegex: String = #"""
-  (?x:
-    \#(identRegex) # ident
-    \s*
-    (?:<[^>]*>)? # optional type parameters
-    \s*
-    (?:\([^)]*\))? # optional constraint (this is an approximation)
-    \s*
-    \?? # optional nulability indicator
-  )
-  """#
+/// An identifier, plain (`foo`) or quoted (`` `foo-bar` ``).
+local identifier: MatchPattern = new {
+  name = "variable.other.property.pkl"
+  match = identRegex
+}
 
+/// Matches the position at which a type that is not delimited by brackets (e.g. `Int`, `String?`,
+/// `String | Int`) is complete.
+///
+/// This is the case right after a token that can end a type, when what follows
+/// is not the continuation of a type (a union `|`, type arguments `<`, a constraint `(`,
+/// the arrow of a function type `->`, or the nullable marker `?` of a parenthesized type).
 @SourceCode { language = "RegExp" }
-local typeRegex: String = #"""
-  (?x:
-    \#(baseTypeRegex)
-    \s*
-    (\|\s*\#(baseTypeRegex))*
-  )
-  """#
+local typeEnd: String = #"(?<=[\p{L}0-9_$>?)"`])(?<!->)(?=\s*(?:[^\s|<(\-?]|\?\?|-(?!>)|$))"#
 
 local languageConstant: Pattern = new KeywordMatchPattern {
   name = "constant.character.language.pkl"
@@ -194,9 +212,11 @@ local class KeywordMatchPattern {
     match = new Listing {
       "\\b"
       "("
-      keywords.join("|")
+      // sort keywords by length; otherwise the first alternative match wins (e.g. `read` wins over `read?`).
+      keywords.toList().sortBy((keyword) -> -keyword.length).join("|")
       ")"
-      "\\b"
+      // not `\\b`, because keywords like `read?` end in a non-word character
+      "(?!\\w)"
     }.join("")
   }
 }
@@ -248,7 +268,7 @@ local symbolOperator: MatchPattern = new {
       |
       !!    # non-null assertion
       |
-      =     # assignment
+      =     # assignments
       |
       ->    # lambda arrow
       |
@@ -261,7 +281,7 @@ local punctuation: MatchPattern = new {
   name = "punctuation.pkl"
   match = #"""
     (?x:
-      \.\?  # optional chain
+      \?\.  # optional chain
       |
       \.    # member access
       |
@@ -282,8 +302,10 @@ local keywordOperator: MatchPattern = new KeywordMatchPattern {
     "is"
     "let"
     "read"
-    "read\\?"
+    #"read\*"#
+    #"read\?"#
     "import"
+    #"import\*"#
     "throw"
     "trace"
   }
@@ -411,18 +433,29 @@ local modulePattern: MatchPattern = new {
   }
 }
 
-local typeAlias: MatchPattern = new {
-  name = ""
-  match = #"""
+/// Patterns for a type parameter list, e.g. `<in T, out U>` in `class Foo<in T, out U>`.
+local typeParameterPatterns: Listing<Pattern> = new {
+  new MatchPattern {
+    name = "storage.modifier.pkl"
+    match = #"\b(?:in|out)(?=\s+\#(identRegex))"#
+  }
+  new MatchPattern {
+    name = "entity.name.type.pkl"
+    match = #"\#(identRegex)|[<>]"#
+  }
+}
+
+local typeAlias: BeginEndPattern = new {
+  begin = #"""
     (?x:
       (typealias)
       \s+
       (\#(identRegex))
+      \s*(<[^>]*>)? # type parameters
       \s*(=)\s*
-      (\#(typeRegex))
     )
     """#
-  captures {
+  beginCaptures {
     ["1"] {
       name = "keyword.class.pkl"
     }
@@ -430,22 +463,21 @@ local typeAlias: MatchPattern = new {
       name = "entity.name.type.pkl"
     }
     ["3"] {
-      name = "punctuation.pkl"
+      patterns = typeParameterPatterns
     }
     ["4"] {
-      name = "entity.name.type.pkl"
+      name = "keyword.operator.pkl"
     }
   }
+  end = #"\#(typeEnd)|^[ \t]*$"#
+  patterns = typeReference
 }
 
 local variableDecl: MatchPattern = new {
   match = #"""
     (?x:
-      (
-        \b\#(identRegex) # variable name
-        |
-        `[^`]+` # quoted variable name
-      )
+      (?<![\p{L}0-9_$])
+      (\#(identRegex)) # variable name
       \s*
       (=)(?!=)
     )
@@ -455,7 +487,7 @@ local variableDecl: MatchPattern = new {
       name = "variable.other.property.pkl"
     }
     ["2"] {
-      name = "punctuation.pkl"
+      name = "keyword.operator.pkl"
     }
   }
 }
@@ -463,41 +495,201 @@ local variableDecl: MatchPattern = new {
 local variableDeclType: BeginEndPattern = new {
   begin = #"""
     (?x:
-      (
-        (?:\b|\s*)\#(identRegex) # variable name
-        |
-        `[^`]+` # quoted variable name
-      )
+      ((?:\b|\s*)\#(identRegex)) # variable name
       \s*
       (:)
       \s*
-      (\#(typeRegex)) # type
+      (?=[\p{L}_$"`(]) # start of a type
     )
     """#
-  end = #"\s*=|,|\)|^[ \t]*$"#
-  captures {
+  beginCaptures {
     ["1"] {
       name = "variable.other.property.pkl"
     }
     ["2"] {
       name = "punctuation.pkl"
     }
-    ["3"] {
-      name = "entity.name.type.pkl"
+  }
+  end = #"\s*(=)|,|\)|\#(typeEnd)|^[ \t]*$"#
+  endCaptures {
+    ["1"] {
+      name = "keyword.operator.pkl"
     }
   }
+  patterns = typeReference
 }
 
-local genericType: MatchPattern = new {
-  match = #"(:)\s*(\#(typeRegex))"#
-  captures {
+/// A type annotation that is not preceded by a variable name, for example a function return type.
+local typeAnnotation: BeginEndPattern = new {
+  begin = #"(:)\s*(?=[\p{L}_$"`(])"#
+  beginCaptures {
     ["1"] {
       name = "punctuation.pkl"
     }
-    ["2"] {
+  }
+  end = #"\#(typeEnd)|^[ \t]*$"#
+  patterns = typeReference
+}
+
+/// A type with type arguments, e.g. `Mapping<String, Listing<Int>>`.
+///
+/// The type name and opening bracket are the begin match, and the closing bracket is the end match.
+/// The type arguments are tokenized by [typePatterns] (via `#type`), which includes this pattern recursively.
+local genericType: BeginEndPattern = new {
+  begin = #"\#(identRegex)\s*<"#
+  // Also end at a blank line, `{`, `}` or `=` so that a stray `<` does not swallow the rest of the file.
+  end = #">\??|(?=[{}=])|^[ \t]*$"#
+  captures {
+    ["0"] {
       name = "entity.name.type.pkl"
     }
   }
+  patterns = typeReference
+}
+
+local typeName: MatchPattern = new {
+  name = "entity.name.type.pkl"
+  match = #"\#(identRegex)\??"#
+}
+
+/// Parenthesized code, e.g. a constraint following a type (`String(length > 3)`)
+/// or a parenthesized expression within a string interpolation.
+///
+/// Its contents are regular Pkl code, and can contain nested parentheses.
+local parentheses: BeginEndPattern = new {
+  begin = #"\("#
+  end = #"\)"#
+  captures {
+    ["0"] {
+      name = "meta.brace.pkl"
+    }
+  }
+  patterns {
+    new IncludePattern { include = "#parentheses" }
+    new IncludePattern { include = "$self" }
+  }
+}
+
+/// The union operator within a type, e.g. `Foo | Bar`.
+local typeUnion: MatchPattern = new {
+  name = "keyword.operator.pkl"
+  match = #"\|"#
+}
+
+/// Patterns that make up a type.
+local typePatterns: Listing<Pattern> = new {
+  lineComment
+  blockComment
+  typeUnion
+  new IncludePattern { include = "#generic-type" }
+  typeName
+  typeConstraint
+  typeParentheses
+  typeArrow
+  typeNullable
+  new IncludePattern { include = "#strings" }
+}
+
+/// A constraint following a type, e.g. `(length > 3)` in `String(length > 3)`.
+///
+/// Unlike [typeParentheses], the opening parenthesis directly follows the type.
+local typeConstraint: BeginEndPattern = new {
+  begin = #"(?<=[\p{L}0-9_$>?`)])\("#
+  end = #"\)"#
+  captures {
+    ["0"] {
+      name = "meta.brace.pkl"
+    }
+  }
+  patterns {
+    new IncludePattern { include = "#parentheses" }
+    new IncludePattern { include = "$self" }
+  }
+}
+
+/// Parenthesized types: the parameters of a function type, e.g. `(Int, String)` in `(Int, String) -> Boolean`,
+/// or a grouped type, e.g. `(Foo | Bar)?`.
+local typeParentheses: BeginEndPattern = new {
+  begin = #"\("#
+  end = #"\)"#
+  captures {
+    ["0"] {
+      name = "meta.brace.pkl"
+    }
+  }
+  patterns = typeReference
+}
+
+/// The arrow of a function type, e.g. `->` in `(Int) -> String`.
+local typeArrow: MatchPattern = new {
+  name = "keyword.operator.pkl"
+  match = #"->"#
+}
+
+/// The nullable marker of a parenthesized type, e.g. `?` in `((Int) -> String)?`.
+local typeNullable: MatchPattern = new {
+  name = "entity.name.type.pkl"
+  match = #"\?(?!\?)"#
+}
+
+/// Reference to the `type` repository entry.
+local typeReference: Listing<Pattern> = new {
+  new IncludePattern { include = "#type" }
+}
+
+/// All string literals.
+local stringPatterns: Listing<Pattern> = new {
+  for (numPounds in IntSeq(0, 6)) {
+    multilineString(numPounds)
+    singlelineString(numPounds)
+  }
+}
+
+/// A method call, e.g. `foo()`, `foo<Int>()` or `qux.foo()`.
+///
+/// The whole call is scoped as `meta.function-call.pkl`, including the receiver, type arguments, parentheses and arguments.
+///
+/// To tell a generic call apart from a comparison like `a < b`, the opening bracket must be followed by something
+/// that looks like type arguments, and a closing bracket that is directly followed by `(`.
+local functionCall: BeginEndPattern = new {
+  name = "meta.function-call.pkl"
+  begin = #"""
+    (?x:
+      ((?:\#(identRegex)\s*(?:\?\.|\.)\s*)*) # receiver, e.g. `qux.`
+      (?!(?:if|else|when|for|let|in|is|as|throw|trace|read|import|new|function)(?![\p{L}0-9_$])) # keywords that look like calls
+      (\#(identRegex)) # method name
+      (?=\s*(?:<(?:[\p{L}0-9_$,\s<>?|.]|"[^"]*"|`[^`]+`)*>\s*)?\() # type arguments, followed by call arguments
+    )
+    """#
+  beginCaptures {
+    ["1"] {
+      patterns {
+        new IncludePattern { include = "$self" }
+      }
+    }
+    ["2"] {
+      name = "variable.function.pkl"
+    }
+  }
+  // The call is complete after its arguments.
+  end = #"(?<=\))"#
+  patterns {
+    callTypeArguments
+    new IncludePattern { include = "#parentheses" }
+  }
+}
+
+/// Type arguments of a method call, e.g. `<Int>` in `foo<Int>()`.
+local callTypeArguments: BeginEndPattern = new {
+  begin = #"<"#
+  // Also end at a blank line, `{`, `}` or `=` so that a stray `<` does not swallow the rest of the file.
+  end = #">|(?=[{}=])|^[ \t]*$"#
+  captures {
+    ["0"] {
+      name = "entity.name.type.pkl"
+    }
+  }
+  patterns = typeReference
 }
 
 local forPattern: MatchPattern = new {
@@ -527,53 +719,71 @@ local forPattern: MatchPattern = new {
 }
 
 local clazz: MatchPattern = new {
-  name = "entity.name.type.pkl"
-  match = #"\b(class)\s+\#(identRegex)"#
+  match = #"\b(class)\s+(\#(identRegex))\s*(<[^>]*>)?"#
   captures {
     ["1"] {
       name = "keyword.class.pkl"
     }
-  }
-}
-
-local newPattern: MatchPattern = new {
-  match = #"""
-    \b(new)\s+(\#(typeRegex))
-    """#
-  captures {
-    ["1"] {
-      name = "keyword.control.pkl"
-    }
     ["2"] {
       name = "entity.name.type.pkl"
     }
+    ["3"] {
+      patterns = typeParameterPatterns
+    }
   }
+}
+
+local newPattern: BeginEndPattern = new {
+  begin = #"\b(new)\s+(?=\#(identRegex))"#
+  beginCaptures {
+    ["1"] {
+      name = "keyword.control.pkl"
+    }
+  }
+  end = #"\#(typeEnd)|^[ \t]*$"#
+  patterns = typeReference
 }
 
 local functionPattern: MatchPattern = new {
   match = #"""
-    \b(function)\s+(\#(identRegex))
+    \b(function)\s+(\#(identRegex))\s*(<[^>]*>)?
     """#
   captures {
     ["1"] {
       name = "keyword.pkl"
     }
     ["2"] {
-      name = "variable.other.property.pkl"
+      name = "variable.function.pkl"
+    }
+    ["3"] {
+      patterns = typeParameterPatterns
     }
   }
 }
 
-local asPattern: MatchPattern = new {
-  match = #"\b(as)\s+(\#(typeRegex))"#
-  captures {
+local typeTestPattern: BeginEndPattern = new {
+  begin = #"\b(as|is)\s+(?=\#(identRegex))"#
+  beginCaptures {
     ["1"] {
       name = "keyword.pkl"
     }
-    ["2"] {
-      name = "entity.name.type.pkl"
+  }
+  end = #"\#(typeEnd)|^[ \t]*$"#
+  patterns = typeReference
+}
+
+/// The supertype of a class, e.g. `extends Bar`.
+///
+/// A module's `extends "foo.pkl"` is not matched, because it is followed by a string.
+local extendsPattern: BeginEndPattern = new {
+  begin = #"\b(extends)\s+(?=\#(identRegex))"#
+  beginCaptures {
+    ["1"] {
+      name = "storage.modifier.pkl"
     }
   }
+  end = #"\#(typeEnd)|^[ \t]*$"#
+  patterns = typeReference
 }
 
 local amendedVar: MatchPattern = new {
@@ -592,13 +802,15 @@ patterns {
   forPattern
   newPattern
   functionPattern
-  asPattern
+  typeTestPattern
+  extendsPattern
   languageConstant
   lineComment
   blockComment
   variableDeclType
   variableDecl
-  genericType
+  typeAnnotation
+  functionCall
   amendedVar
   modifier
   keywordOperator
@@ -615,8 +827,14 @@ patterns {
   classKeyword
   punctuation
   annotation
-  for (numPounds in IntSeq(0, 6)) {
-    multilineString(numPounds)
-    singlelineString(numPounds)
-  }
+  new IncludePattern { include = "#strings" }
+  // Must come last, so that keywords, literals, etc. take precedence.
+  identifier
+}
+
+repository {
+  ["strings"] = new PatternList { patterns = stringPatterns }
+  ["type"] = new PatternList { patterns = typePatterns }
+  ["generic-type"] = genericType
+  ["parentheses"] = parentheses
 }

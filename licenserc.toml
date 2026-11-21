@@ -2,11 +2,17 @@ headerPath = "scripts/license-header.txt"
 
 includes = [
     "*.pkl",
+    "*.js",
+    "*.mjs",
+    "*.sh",
 ]
 
 [git]
 attrs = 'auto'
 ignore = 'auto'
+
+[mapping.SLASHSTAR_STYLE]
+extensions = ["mjs"]
 
 [properties]
 copyrightOwner = "Apple Inc. and the Pkl project authors"
