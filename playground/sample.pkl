@@ -93,6 +93,14 @@ rawMulti = #"""
   continued, but a plain \ is not an escape here.
   """#
 
+// ---------------------------------------------------------------------------
+// Regex literals: string contents are highlighted as a regular expression
+// ---------------------------------------------------------------------------
+
+rawRegex = Regex(#"^(?<year>\d{4})-(\d{2})-[a-z]+\s*$"#)
+escapedRegex = Regex("\\d+\\.\\d*|a(?:b|c)?")
+interpolatedRegex = Regex(#"id-\#(pigeon.name)-[0-9]+"#)
+
 output {
   renderer = new JsonRenderer {}
 }

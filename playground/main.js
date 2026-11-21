@@ -25,6 +25,7 @@ import solarizedLight from "@shikijs/themes/solarized-light";
 import solarizedDark from "@shikijs/themes/solarized-dark";
 import nord from "@shikijs/themes/nord";
 import oneDarkPro from "@shikijs/themes/one-dark-pro";
+import regex from "@shikijs/langs/regex";
 import sample from "./sample.pkl";
 
 // Injected by scripts/build-playground.mjs (Syntaxes/pkl.tmLanguage converted to JSON).
@@ -42,7 +43,7 @@ async function main() {
   // noinspection NpmUsedModulesInstalled
   const highlighter = await createHighlighterCore({
     themes,
-    langs: [{...grammar, name: "pkl"}],
+    langs: [{...grammar, name: "pkl"}, regex],
     engine: createOnigurumaEngine(import("shiki/wasm")),
   });
 
